@@ -1,0 +1,4 @@
+    PID  RUID  EUID RUSER    COMMAND         COMMAND
+   1303  1000     0 student  fusermount3     fusermount3 -o rw,nosuid,nodev,fsname=portal,auto_unmount,subtype=portal -- /run/user/1000/doc
+   1839  1000     0 student  su              su -
+   1960  1000     0 student  passwd          passwd

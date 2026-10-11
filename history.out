@@ -1,0 +1,47 @@
+    1  chage -l user1
+    2  mkdir -p /root/mephi-artifacts
+    3  find / -type f -perm -4000 -print > /root/mephi-artifacts/suid-files.out 2> /root/mephi-artifacts/find-errors.log
+    4  cat /root/mephi-artifacts/suid-files.out
+    5  ps -eo pid,ruid,euid,ruser,comm,args | awk 'NR == 1 || ($2 >= 1000 && $2 != 65534 && $3 == 0)' | tee /root/mephi-artifacts/privileged-processes.out
+    6  [200~printf 'Учебный файл: доступ только root\n' > /root/mephi-secret.txt
+    7  chmod 600 /root/mephi-secret.txt
+    8  cp /usr/bin/cat /home/user1/cat-suid
+    9  chown root:students /home/user1/cat-suid
+   10  chmod 0750 /home/user1/cat-suid
+   11  printf 'Учебный файл: доступ только root\n' > /root/mephi-secret.txt
+   12  chmod 600 /root/mephi-secret.txt
+   13  cp /usr/bin/cat /home/user1/cat-suid
+   14  chown root:students /home/user1/cat-suid
+   15  chmod 0750 /home/user1/cat-suid
+   16  su - user1 -c '/home/user1/cat-suid /root/mephi-secret.txt'
+   17  [200~chmod 4750 /home/user1/cat-suid
+   18  chmod 4750 /home/user1/cat-suid
+   19  su - user1 -c '/home/user1/cat-suid /root/mephi-secret.txt'
+   20  cp /usr/bin/chown /home/user1/chown-cap
+   21  chown root:students /home/user1/chown-cap
+   22  chmod 0750 /home/user1/chown-cap
+   23  su - user1 -c 'touch /home/user1/cap-test.txt'
+   24  su - user1 -c '/home/user1/chown-cap root /home/user1/cap-test.txt'
+   25  setcap cap_chown=ep /home/user1/chown-cap
+   26  getcap /home/user1/chown-cap
+   27  su - user1 -c '/home/user1/chown-cap root /home/user1/cap-test.txt'
+   28  ls -l /home/user1/cap-test.txt
+   29  printf 'user1 ALL=(root) /usr/bin/date\n' > /root/mephi-user1-time
+   30  visudo -cf /root/mephi-user1-time && install -o root -g root -m 0440 /root/mephi-user1-time /etc/sudoers.d/mephi-user1-time
+   31  visudo -c
+   32  sudo -l -U user1
+   33  su - user1
+   34  sudo /usr/bin/date -s "$(date '+%Y-%m-%d %H:%M:%S')"
+   35  su - user1 -c 'whoami; sudo /usr/bin/date -s "$(date "+%Y-%m-%d %H:%M:%S")"'
+   36  su - user1
+   37  stat /home/user1 > /root/mephi-artifacts/stat.out
+   38  stat /home/user1/cat-suid >> /root/mephi-artifacts/stat.out
+   39  stat /home/user1/chown-cap >> /root/mephi-artifacts/stat.out
+   40  getcap /home/user1/chown-cap > /root/mephi-artifacts/getcap.out
+   41  cp /etc/passwd /etc/group /etc/sudoers /root/mephi-artifacts/
+   42  cp /etc/sudoers.d/mephi-user1-time /root/mephi-artifacts/
+   43  awk 'BEGIN {FS=OFS=":"} {$2="REDACTED"; print}' /etc/shadow > /root/mephi-artifacts/shadow
+   44  history > /root/mephi-artifacts/history.out
+    1  exit
+    2  sudo /usr/bin/date -s "$(date '+%Y-%m-%d %H:%M:%S')"
+    3  history > ~/history.out
